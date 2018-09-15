@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="cn.dawnland.filebucket.common.mapper.UserMapper">
+
+    <select id="findUserByUsernameAndPassword" resultType="cn.dawnland.filebucket.common.pojo.entity.user.User">
+        select *
+        from `user`
+        where username = #{username} and password = #{password}
+    </select>
+
+    <insert id="insertUser" >
+        insert into `user`
+        (
+        <trim suffixOverrides=",">
+            <if test="username != null and username != ''">
+                username,
+            </if>
+            <if test="password != null and password != ''">
+                password,
+            </if>
+            <if test="tencentNumber != null and tencentNumber != ''">
+                tencent_number,
+            </if>
+            <if test="email != null and email != ''">
+                email,
+            </if>
+            <if test="phone != null and phone != ''">
+                phone,
+            </if>
+            <if test="lastLogin != null">
+                last_login,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        )
+        value
+        (
+        <trim suffixOverrides=",">
+            <if test="username != null and username != ''">
+                #{username},
+            </if>
+            <if test="password != null and password != ''">
+                #{password},
+            </if>
+            <if test="tencentNumber != null and tencentNumber != ''">
+                #{tencentNumber},
+            </if>
+            <if test="email != null and email != ''">
+                #{email},
+            </if>
+            <if test="phone != null and phone != ''">
+                #{phone},
+            </if>
+            <if test="lastLogin != null">
+                #{lastLogin},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+        </trim>
+        )
+    </insert>
+
+    <update id="updateNotNullUser">
+        update `user`
+        set
+        <trim suffixOverrides=",">
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="tencentNumber != null and tencentNumber != ''">
+                tencent_number = #{tencentNumber},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email,},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="lastLogin != null">
+                last_login = #{lastLogin}
+            </if>
+        </trim>
+    </update>
+
+
+</mapper>
