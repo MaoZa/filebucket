@@ -1,10 +1,19 @@
-package cn.dawnland.filebucket.common.pojo.entity.user;
+package cn.dawnland.filebucket.common.pojo.user;
 
 public class UserSession {
+    private Long id;
     private String userName;
     private String eMail;
     private String tencentNumber;
     private String loginIp;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getUserName() {
         return userName;

@@ -1,4 +1,4 @@
-package cn.dawnland.filebucket.common.pojo.entity;
+package cn.dawnland.filebucket.common.pojo;
 
 import com.qcloud.cos.utils.Jackson;
 

@@ -3,13 +3,13 @@
 
 <mapper namespace="cn.dawnland.filebucket.common.mapper.UserMapper">
 
-    <select id="findUserByUsernameAndPassword" resultType="cn.dawnland.filebucket.common.pojo.entity.user.User">
+    <select id="findUserByUsernameAndPassword" resultType="cn.dawnland.filebucket.common.pojo.user.User">
         select *
         from `user`
         where username = #{username} and password = #{password}
     </select>
 
-    <insert id="insertUser" >
+    <insert id="insertUser" parameterType="cn.dawnland.filebucket.common.pojo.user.User">
         insert into `user`
         (
         <trim suffixOverrides=",">
@@ -31,9 +31,7 @@
             <if test="lastLogin != null">
                 last_login,
             </if>
-            <if test="updateTime != null">
-                update_time,
-            </if>
+            create_time,
         </trim>
         )
         value
@@ -57,14 +55,12 @@
             <if test="lastLogin != null">
                 #{lastLogin},
             </if>
-            <if test="updateTime != null">
-                #{updateTime},
-            </if>
+            now(),
         </trim>
         )
     </insert>
 
-    <update id="updateNotNullUser">
+    <update id="updateNotNullUser" parameterType="cn.dawnland.filebucket.common.pojo.user.User">
         update `user`
         set
         <trim suffixOverrides=",">
@@ -83,13 +79,17 @@
             <if test="email != null and email != ''">
                 email = #{email,},
             </if>
-            <if test="updateTime != null">
-                update_time = #{updateTime},
-            </if>
             <if test="lastLogin != null">
-                last_login = #{lastLogin}
+                last_login = #{lastLogin},
+            </if>
+            <if test="userStatus != null">
+                user_status = #{userStatus},
+            </if>
+            <if test="deleted != null">
+                deleted = #{deleted},
             </if>
         </trim>
+        where id = #{id}
     </update>
 
 

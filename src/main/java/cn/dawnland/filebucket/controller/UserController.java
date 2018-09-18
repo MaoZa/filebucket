@@ -1,10 +1,9 @@
 package cn.dawnland.filebucket.controller;
 
-import cn.dawnland.filebucket.common.pojo.entity.ResponseData;
-import cn.dawnland.filebucket.common.pojo.entity.user.User;
-import cn.dawnland.filebucket.common.pojo.entity.user.UserSession;
+import cn.dawnland.filebucket.common.pojo.ResponseData;
+import cn.dawnland.filebucket.common.pojo.user.User;
+import cn.dawnland.filebucket.common.pojo.user.UserSession;
 import cn.dawnland.filebucket.common.service.UserService;
-import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +21,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
     /**
      * 用户名密码登录
      * @param user
@@ -32,11 +32,10 @@ public class UserController {
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public ResponseData login(@RequestBody User user, HttpServletRequest request, HttpServletResponse response){
         user = userService.findUserByUsernameAndPassword(user.getUsername(), user.getPassword());
-        user.setLastLogin(new Date());
-        userService.updateNotNullUser(user);
         ResponseData responseData = new ResponseData();
         if(user != null){
             UserSession userSession = new UserSession();
+            userSession.setId(user.getId());
             userSession.setUserName(user.getUsername());
             userSession.setTencentNumber(user.getTencentNumber());
             userSession.seteMail(user.getEmail());
@@ -47,6 +46,9 @@ public class UserController {
             responseData.setCode("100001");
             responseData.setMessage("用户名或密码错误");
         }
+        user.clean();
+        user.setLastLogin(new Date());
+        userService.updateNotNullUser(user);
         return responseData;
     }
 
@@ -58,6 +60,7 @@ public class UserController {
         }catch (Exception e){
             ResponseData responseData = new ResponseData();
             responseData.setCode("40001");
+            responseData.setMessage(e.getMessage());
             return responseData;
         }
         return new ResponseData();
@@ -67,5 +70,14 @@ public class UserController {
     public ResponseData logout(HttpServletRequest request){
         request.getSession().setAttribute("UserSession", null);
         return new ResponseData();
+    }
+
+    @RequestMapping(value = "reset", method = RequestMethod.GET)
+    public ResponseData reset(HttpServletRequest request){
+        ResponseData responseData = new ResponseData();
+        UserSession userSession = (UserSession)request.getSession().getAttribute("UserSession");
+        userSession.getUserName();
+
+        return responseData;
     }
 }

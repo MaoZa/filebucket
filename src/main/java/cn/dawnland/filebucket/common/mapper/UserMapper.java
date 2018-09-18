@@ -1,6 +1,6 @@
 package cn.dawnland.filebucket.common.mapper;
 
-import cn.dawnland.filebucket.common.pojo.entity.user.User;
+import cn.dawnland.filebucket.common.pojo.user.User;
 import org.apache.ibatis.annotations.Param;
 
 public interface UserMapper {

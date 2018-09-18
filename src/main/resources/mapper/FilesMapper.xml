@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="cn.dawnland.filebucket.common.mapper.FilesMapper">
+
+    <insert id="insertFileInfo" parameterType="cn.dawnland.filebucket.common.pojo.files.Files">
+        insert into files(user_id, file_name, file_size, bucket_file_name, create_time)
+        value (#{userId}, #{fileName}, #fileSize}, #{bucketFileName}, now())
+    </insert>
+
+    <select id="findFileInfoByParams" resultType="cn.dawnland.filebucket.common.pojo.files.Files" parameterType="cn.dawnland.filebucket.common.pojo.files.Files">
+        select a.*
+        from files a
+        where
+          <trim prefixOverrides="and">
+              <if test="userId != null and userId != ''">
+                  user_id = #{userId}
+              </if>
+              <if test="fileName != null and fileName != ''">
+                  and file_name like concat('%', #{fileName} , '%')
+              </if>
+              and deleted = 0
+          </trim>
+    </select>
+
+    <update id="updateFileNotNull" parameterType="cn.dawnland.filebucket.common.pojo.files.Files">
+        update files
+        set
+        <trim suffixOverrides=",">
+            <if test="userId != null and userId !=''">
+                user_id = #{userId},
+            </if>
+            <if test="fileName != null and fileName != ''">
+                file_name = #{fileName},
+            </if>
+            <if test="bucketFileName != null and bucketFileName != ''">
+                bucket_file_name = #{bucketFileName},
+            </if>
+            <if test="fileSize != null and fileSize != ''">
+                file_size = #{fileSize},
+            </if>
+            <if test="deleted != null">
+                deleted = #{deleted},
+            </if>
+        </trim>
+    </update>
+
+</mapper>

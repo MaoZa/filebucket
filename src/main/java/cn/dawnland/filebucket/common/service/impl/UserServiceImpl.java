@@ -1,7 +1,7 @@
 package cn.dawnland.filebucket.common.service.impl;
 
 import cn.dawnland.filebucket.common.mapper.UserMapper;
-import cn.dawnland.filebucket.common.pojo.entity.user.User;
+import cn.dawnland.filebucket.common.pojo.user.User;
 import cn.dawnland.filebucket.common.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

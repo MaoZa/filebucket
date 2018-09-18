@@ -4,14 +4,10 @@ import cn.dawnland.filebucket.interceptor.LoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import java.nio.charset.Charset;
-import java.util.List;
 
 @SpringBootApplication
 public class SpringMvcConfig extends WebMvcConfigurationSupport {
@@ -44,19 +40,4 @@ public class SpringMvcConfig extends WebMvcConfigurationSupport {
         configurer.enable();
     }
 
-//    /** 解决乱码 */
-//    @Bean
-//    public HttpMessageConverter<String> responseBodyConverter() {
-//        StringHttpMessageConverter converter = new StringHttpMessageConverter(Charset.forName("UTF-8"));
-//        return converter;
-//    }
-//    @Override
-//    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-//        super.configureMessageConverters(converters);
-//        converters.add(responseBodyConverter());
-//    }
-//    @Override
-//    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-//        configurer.favorPathExtension(false);
-//    }
 }

@@ -1,6 +1,6 @@
 package cn.dawnland.filebucket.common.service;
 
-import cn.dawnland.filebucket.common.pojo.entity.user.User;
+import cn.dawnland.filebucket.common.pojo.user.User;
 
 public interface UserService {
 

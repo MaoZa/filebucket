@@ -1,4 +1,4 @@
-package cn.dawnland.filebucket.common.pojo.entity.user;
+package cn.dawnland.filebucket.common.pojo.user;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,6 +18,24 @@ public class User implements Serializable {
     private Date createTime;
     private Date updateTime;
     private Date lastLogin;
+    private Integer userStatus;
+    private Integer deleted;
+
+    /**
+     * 清空除了id的其他属性
+     */
+    public void clean(){
+        this.username = null;
+        this.password = null;
+        this.tencentNumber = null;
+        this.phone = null;
+        this.email = null;
+        this.createTime = null;
+        this.updateTime = null;
+        this.lastLogin = null;
+        this.userStatus = null;
+        this.deleted = null;
+    }
 
     public Long getId() {
         return id;
@@ -89,5 +107,21 @@ public class User implements Serializable {
 
     public void setLastLogin(Date lastLogin) {
         this.lastLogin = lastLogin;
+    }
+
+    public Integer getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(Integer userStatus) {
+        this.userStatus = userStatus;
+    }
+
+    public Integer getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Integer deleted) {
+        this.deleted = deleted;
     }
 }
