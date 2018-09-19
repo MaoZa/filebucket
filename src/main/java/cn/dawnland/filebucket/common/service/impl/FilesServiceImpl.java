@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@Transactional
 public class FilesServiceImpl implements FilesService {
 
     @Autowired
@@ -45,6 +44,7 @@ public class FilesServiceImpl implements FilesService {
     @Value("${tencent.dawnlandbucket.prefix}")
     private String prefix;
 
+    @Transactional
     public UploadMsg upload(HttpServletRequest request, MultipartFile file) throws Exception{
         UserSession userSession = (UserSession) request.getSession().getAttribute("UserSession");
         if(file == null){
@@ -52,7 +52,7 @@ public class FilesServiceImpl implements FilesService {
         }
         String oldFileName = file.getOriginalFilename();
         String eName = oldFileName.substring(oldFileName.lastIndexOf("."));
-        String newFileName = UUID.randomUUID()+eName;
+        String newFileName = UUID.randomUUID() + eName;
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
         int month=cal.get(Calendar.MONTH);
@@ -76,7 +76,7 @@ public class FilesServiceImpl implements FilesService {
             String key = "/" + this.prefix + "/" + userSession.getUserName().toLowerCase() + "/" + year + "/" + month + "/" + day + "/" + newFileName;
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, localFile);
             PutObjectResult putObjectResult = cosclient.putObject(putObjectRequest);
-            Files files = new Files(userSession.getId(), oldFileName, newFileName, localFile.length());     //创建Files对象
+            Files files = new Files(userSession.getId(), oldFileName, newFileName, this.path + putObjectRequest.getKey(), localFile.length());     //创建Files对象
             if(this.insertFileInfo(files) < 1){//插入Files记录
                 throw new Exception("插入文件记录错误,请重试");
             }
@@ -90,6 +90,26 @@ public class FilesServiceImpl implements FilesService {
     }
 
     @Override
+    @Transactional
+    public void deleteFiles(Files files, HttpServletRequest request) throws Exception {
+        UserSession userSession = (UserSession) request.getSession().getAttribute("UserSession");
+        filesMapper.deleteFiles(files.getId());
+        COSCredentials cred = new BasicCOSCredentials(accessKey, secretKey);
+        ClientConfig clientConfig = new ClientConfig(new Region(bucket));
+        COSClient cosclient = new COSClient(cred, clientConfig);
+        String bucketName = this.bucketName;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(files.getCreateTime());
+        int year = calendar.get(Calendar.YEAR);
+        int month=calendar.get(Calendar.MONTH);
+        int day=calendar.get(Calendar.DATE);
+        String key = "/" + this.prefix + "/" + userSession.getUserName().toLowerCase() + "/" + year + "/" + month + "/" + day + "/" + files.getBucketFileName();
+        cosclient.deleteObject(bucketName, key);
+        cosclient.shutdown();
+    }
+
+    @Override
+    @Transactional
     public Integer insertFileInfo(Files files) {
         return filesMapper.insertFileInfo(files);
     }
@@ -98,4 +118,15 @@ public class FilesServiceImpl implements FilesService {
     public List<Files> findFileInfoByParams(Files files) {
         return filesMapper.findFileInfoByParams(files);
     }
+
+    @Override
+    public Files findFilesByFilesId(Long id) {
+        return filesMapper.findFilesByFilesId(id);
+    }
+
+    @Override
+    public Long findSumSize(Long userId) {
+        return filesMapper.findSumSize(userId);
+    }
+
 }

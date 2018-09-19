@@ -23,6 +23,14 @@ public interface FilesService {
     UploadMsg upload(HttpServletRequest request, MultipartFile file) throws Exception;
 
     /**
+     * 删除文件
+     * @param files
+     * @return
+     * @throws Exception
+     */
+    void deleteFiles(Files files, HttpServletRequest request) throws Exception;
+
+    /**
      * 插入文件记录
      * @param files
      * @return
@@ -35,5 +43,19 @@ public interface FilesService {
      * @return
      */
     List<Files> findFileInfoByParams(Files files);
+
+    /**
+     * id查记录
+     * @param id
+     * @return
+     */
+    Files findFilesByFilesId(Long id);
+
+    /**
+     * 查询用户已存文件大小
+     * @param userId
+     * @return
+     */
+    Long findSumSize(Long userId);
 
 }

@@ -4,22 +4,24 @@ import java.util.Date;
 
 public class Files {
 
-    private  Long id;
-    private  Long userId;
-    private  String fileName;
-    private  String bucketFileName;
-    private  Long fileSize;
+    private Long id;
+    private Long userId;
+    private String fileName;
+    private String fileUrl;
+    private String bucketFileName;
+    private Long fileSize;
     private Date createTime;
-    private  Date updataTime;
+    private Date updataTime;
     private Integer deleted;
 
     public Files() {
     }
 
-    public Files(Long userId, String fileName, String bucketFileName, Long fileSize) {
+    public Files(Long userId, String fileName, String bucketFileName, String fileUrl, Long fileSize) {
         this.userId = userId;
         this.fileName = fileName;
         this.bucketFileName = bucketFileName;
+        this.fileUrl = fileUrl;
         this.fileSize = fileSize;
     }
 
@@ -45,6 +47,14 @@ public class Files {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
     }
 
     public String getBucketFileName() {

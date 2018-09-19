@@ -3,9 +3,15 @@
 
 <mapper namespace="cn.dawnland.filebucket.common.mapper.FilesMapper">
 
+    <!--<resultMap id="FilesMap" type="cn.dawnland.filebucket.common.pojo.files.Files">-->
+        <!--<result column="id" property="id"/>-->
+        <!--<result column="user_id" property="userId"/>-->
+        <!--<result column="file_name" property="fileName"/>-->
+    <!--</resultMap>-->
+
     <insert id="insertFileInfo" parameterType="cn.dawnland.filebucket.common.pojo.files.Files">
-        insert into files(user_id, file_name, file_size, bucket_file_name, create_time)
-        value (#{userId}, #{fileName}, #fileSize}, #{bucketFileName}, now())
+        insert into files(user_id, file_name, file_size, bucket_file_name, file_url, create_time)
+        value (#{userId}, #{fileName}, #{fileSize}, #{bucketFileName}, #{fileUrl}, now())
     </insert>
 
     <select id="findFileInfoByParams" resultType="cn.dawnland.filebucket.common.pojo.files.Files" parameterType="cn.dawnland.filebucket.common.pojo.files.Files">
@@ -42,7 +48,30 @@
             <if test="deleted != null">
                 deleted = #{deleted},
             </if>
+            <if test="createTime != null and createTIME != ''">
+                create_time = #{createTime},
+            </if>
         </trim>
+        where id = #{id},
     </update>
+
+    <select id="findFilesByFilesId" resultType="cn.dawnland.filebucket.common.pojo.files.Files" parameterType="java.lang.Long">
+        select a.*
+        from files a
+        where id = #{id}
+    </select>
+
+    <update id="deleteFiles" >
+        update files
+        set deleted = 1, file_url = null
+        where id = #{id}
+    </update>
+
+    <select id="findSumSize" resultType="java.lang.Long">
+        select sum(file_size)
+        from files
+        where user_id = #{userId}
+        and deleted = 0
+    </select>
 
 </mapper>

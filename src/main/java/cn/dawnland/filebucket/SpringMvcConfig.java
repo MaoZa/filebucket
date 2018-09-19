@@ -15,19 +15,25 @@ public class SpringMvcConfig extends WebMvcConfigurationSupport {
     @Autowired
     private LoginInterceptor loginInterceptor;
 
-    /** 配置登录拦截器 */
+    /**
+     * 配置登录拦截器
+     */
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginInterceptor).addPathPatterns("/**");
     }
 
-    /** 指定根请求页面 */
+    /**
+     * 指定根请求页面
+     */
     @Override
     protected void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("index");
     }
 
-    /** 配置视图解析器 */
+    /**
+     * 配置视图解析器
+     */
     @Bean
     public ViewResolver getViewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
@@ -35,9 +41,13 @@ public class SpringMvcConfig extends WebMvcConfigurationSupport {
         resolver.setSuffix(".jsp");
         return resolver;
     }
+
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
 
+
 }
+
+

@@ -32,6 +32,9 @@ spring:
       testOnReturn: false
       poolPreparedStatements: true
       maxOpenPreparedStatements: 20
+  servlet:
+    multipart:
+      max-file-size: -1
 
 
 tencent:
@@ -42,7 +45,7 @@ tencent:
     bucketName: dawnland-10049393
     path: https://dawnland-10049393.cossh.myqcloud.com
     prefix: dawnlandbucket
-
+    userMaxSize: 209715200
 
 excludeUrl:
   array: /user/login, /user/register, /user/resetpassword
@@ -53,6 +56,7 @@ mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
     log-prefix: dao.
+    map-underscore-to-camel-case: true
 
 #logging:
 #  level:
