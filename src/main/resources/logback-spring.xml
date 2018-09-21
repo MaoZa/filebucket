@@ -34,8 +34,7 @@
     <!--<logger name="java.sql.PreparedStatement" level="DEBUG"/>-->
     <logger name="org.mybatis.spring.transaction.SpringManagedTransaction" level="DEBUG"/>
     <logger name="org.springframework.jdbc.datasource.DataSourceUtils" level="INFO"/>
-    <logger name="org.mybatis.spring.SqlSessionUtils" level="INFO"/>
-    <logger name="org.springframework.jdbc.datasource.DataSourceUtils" level="INFO"/>
+    <logger name="org.mybatis.spring.SqlSessionUtils" level="DEBUG"/>
     <logger name="org.springframework.web.servlet.DispatcherServlet" level="INFO"/>
     <logger name="com.alibaba.druid.pool.DruidDataSource" level="INFO"/>
     <logger name="com.alibaba.druid.pool.DruidDataSource" level="ERROR"/>

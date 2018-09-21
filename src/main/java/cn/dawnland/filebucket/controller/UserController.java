@@ -21,7 +21,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
     /**
      * 用户名密码登录
      * @param user
@@ -54,16 +53,24 @@ public class UserController {
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
     public ResponseData register(@RequestBody User user){
+        ResponseData responseData = new ResponseData();
+        User userTemp = new User();
+        userTemp.setEmail(user.getEmail());
+        userTemp = userService.findUserByParams(userTemp);
+        if(userTemp != null){
+            responseData.setCode("40001");
+            responseData.setMessage("邮箱已绑定");
+            return responseData;
+        }
         try{
             user.setLastLogin(new Date());
             userService.insertUser(user);
         }catch (Exception e){
-            ResponseData responseData = new ResponseData();
             responseData.setCode("40001");
             responseData.setMessage(e.getMessage());
             return responseData;
         }
-        return new ResponseData();
+        return responseData;
     }
 
     @RequestMapping(value = "logout", method = RequestMethod.GET)
@@ -77,7 +84,6 @@ public class UserController {
         ResponseData responseData = new ResponseData();
         UserSession userSession = (UserSession)request.getSession().getAttribute("UserSession");
         userSession.getUserName();
-
         return responseData;
     }
 }

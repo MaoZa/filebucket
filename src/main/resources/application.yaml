@@ -35,6 +35,17 @@ spring:
   servlet:
     multipart:
       max-file-size: -1
+  mail:
+    host: smtp.qq.com
+    password: orxusnyauksrcbbc
+    username: cap_sub@dawnland.cn
+    properties:
+      mail:
+        starttls:
+          required: true
+          enable: true
+
+
 
 
 tencent:

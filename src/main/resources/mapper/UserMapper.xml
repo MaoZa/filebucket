@@ -92,5 +92,21 @@
         where id = #{id}
     </update>
 
+    <select id="findUserByParams" resultType="cn.dawnland.filebucket.common.pojo.user.User" parameterType="cn.dawnland.filebucket.common.pojo.user.User">
+        select a.*
+        from `user` a
+        where
+        <trim prefixOverrides="and">
+            <if test="id != null and id != ''">
+                a.id = #{id}
+            </if>
+            <if test="email != null and email != ''">
+                and a.email = #{email}
+            </if>
+            <if test="tencentNumber != null and tencentNumber != ''">
+                and a.tencent_number = #{tencentNumber}
+            </if>
+        </trim>
+    </select>
 
 </mapper>

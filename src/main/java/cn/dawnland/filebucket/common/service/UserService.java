@@ -13,4 +13,5 @@ public interface UserService {
     /** update用户 */
     void updateNotNullUser(User user);
 
+    User findUserByParams(User user);
 }
