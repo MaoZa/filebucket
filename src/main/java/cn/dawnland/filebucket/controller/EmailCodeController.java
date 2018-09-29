@@ -24,9 +24,9 @@ public class EmailCodeController {
     @Autowired
     private EmailCodeService emailCodeService;
 
-    @RequestMapping(value = "sendcode", method = RequestMethod.POST)
+    @RequestMapping(value = "sendcode", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseData sendCode(@RequestParam("email")String email, HttpServletRequest httpServletRequest, HttpServletResponse response){
+    public ResponseData sendCode(@RequestParam("email") String email, HttpServletRequest httpServletRequest, HttpServletResponse response){
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         /** --------------生成验证码开始---------------- */
         char[] codeArray = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
@@ -45,6 +45,8 @@ public class EmailCodeController {
         emailCode.setCreateTime(new Date(nowDate));
         emailCode.setFailureTime(new Date(nowDate + 600000));
         try {
+            //先逻辑删除该邮箱下所有未失效验证码
+            emailCodeService.deleteEmailCodeByEmail(email);
             emailCodeService.insertCode(emailCode);
         } catch (Exception e) {
             ResponseData responseData = new ResponseData();

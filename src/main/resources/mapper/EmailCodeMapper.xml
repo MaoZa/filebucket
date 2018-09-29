@@ -56,6 +56,7 @@
         </trim>
     </select>
 
+    <!--根据id逻辑删除-->
     <update id="deleteEmailCode">
         update email_code
         set
@@ -67,4 +68,30 @@
         where id = #{id}
     </update>
 
+    <!--根据邮箱逻辑删除 所有-->
+    <update id="deleteEmailCodeByEmail">
+        update email_code
+        set deleted = 1
+        where deleted = 0 and email = #{email}
+    </update>
+
+    <!--根据邮箱及验证码查询有效记录-->
+    <select id="findCodeInfoByEmailAndEmailCode" resultType="cn.dawnland.filebucket.common.pojo.emailcode.EmailCode">
+        select a.*
+        from email_code a
+        where email = #{email}
+        and code = #{emailCode}
+        and deleted = 0
+        and failure_time > now()
+    </select>
+
+    <!--根据邮箱及验证码更新记录为已使用(删除)-->
+    <update id="updateCodeStatusByEmailAndEmailCode">
+        update email_code
+        set deleted = 1
+        where email = #{email}
+        and code = #{emailCode}
+        and deleted = 0
+        and failure_time > now()
+    </update>
 </mapper>

@@ -9,6 +9,7 @@ import cn.dawnland.filebucket.common.utils.FilesSizeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,8 +36,7 @@ public class FilesController {
      * @return
      */
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    @ResponseBody
-    public ResponseData Upload(@RequestParam(value = "file") MultipartFile file, HttpServletRequest request){
+    public String Upload(@RequestParam(value = "file") MultipartFile file, HttpServletRequest request, Model model){
         UserSession userSession = (UserSession)request.getSession().getAttribute("UserSession");
         Long sumSize = filesService.findSumSize(userSession.getId());
         sumSize = sumSize == null ? 0 : sumSize;
@@ -45,58 +45,67 @@ public class FilesController {
             if(userMaxSize - sumSize >= file.getSize()){
                 try {
                     UploadMsg uploadMsg = filesService.upload(request, file);
-                    data.put("uploadMsg", uploadMsg);
-                    data.put("residualSpace", userMaxSize - sumSize - file.getSize());
-                    return new ResponseData(data);
+//                    data.put("uploadMsg", uploadMsg);
+//                    data.put("residualSpace", userMaxSize - sumSize - file.getSize());
+//                    return new ResponseData(data);
+                    model.addAttribute("title", "成功");
+                    model.addAttribute("msg", "上传成功");
+                    return "returnPage";
                 } catch (Exception e) {
                     UploadMsg uploadMsg = new UploadMsg(-1, "插入文件记录异常", "");
-                    data.put("uploadMsg", uploadMsg);
-                    data.put("residualSpace", userMaxSize - sumSize - file.getSize());
-                    return new ResponseData(data);
+//                    data.put("uploadMsg", uploadMsg);
+//                    data.put("residualSpace", userMaxSize - sumSize - file.getSize());
+//                    return new ResponseData(data);
+                    model.addAttribute("title", "失败");
+                    model.addAttribute("msg", "插入文件记录异常");
+                    return "returnPage";
                 }
             }
         }
-        ResponseData responseData = new ResponseData();
-        responseData.setCode("40001");
-        responseData.setMessage("用户可用储存空间不足。当前剩余空间：" + (userMaxSize - sumSize) + "，文件大小：" + file.getSize());
-        return responseData;
+//        ResponseData responseData = new ResponseData();
+//        responseData.setCode("40001");
+//        responseData.setMessage("用户可用储存空间不足。当前剩余空间：" + (userMaxSize - sumSize) + "，文件大小：" + file.getSize());
+        model.addAttribute("title", "失败");
+        model.addAttribute("msg", "用户可用储存空间不足。当前剩余空间：" + (userMaxSize - sumSize) + "，文件大小：" + file.getSize());
+        return "returnPage";
     }
 
     @RequestMapping(value = "/findFiles", method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseData findFiles(HttpServletRequest request, HttpServletResponse response){
+    public String findFiles(HttpServletRequest request, HttpServletResponse response, Model model){
         UserSession userSession = (UserSession)request.getSession().getAttribute("UserSession");
         Files files = new Files();
         files.setUserId(userSession.getId());
         List<Files> filesList = filesService.findFileInfoByParams(files) ;
         Map data = new HashMap<>();
-        data.put("filesList", filesList);
-        return new ResponseData(data);
+        model.addAttribute("filesList", filesList);
+        return "table";
     }
 
     @RequestMapping(value = "/delete/{filesId}")
-    @ResponseBody
-    public ResponseData deletedFiles(@PathVariable Long filesId, HttpServletRequest request, HttpServletResponse responser){
+    public String deletedFiles(@PathVariable Long filesId, HttpServletRequest request, HttpServletResponse responser, Model model){
         UserSession userSession = (UserSession) request.getSession().getAttribute("UserSession");
         ResponseData responseData = new ResponseData();
         Files files = filesService.findFilesByFilesId(filesId);
         if (files != null) {
             if(!files.getUserId().equals(userSession.getId())){
-                responseData.setCode("40001");
-                responseData.setMessage("删除文件出错，该文件不属于你");
-                return responseData;
+                model.addAttribute("title", "错误");
+                model.addAttribute("msg", "删除文件出错，该文件不属于你");
+                return "returnPage";
             }
             try {
                 filesService.deleteFiles(files, request);
-                responseData.setMessage("删除成功");
+                model.addAttribute("title", "成功");
+                model.addAttribute("msg", "删除成功");
             } catch (Exception e) {
-                responseData.setMessage("系统异常，请稍后重试");
+                model.addAttribute("title", "错误");
+                model.addAttribute("msg", "系统异常，请稍后重试");
             }
-            return responseData;
+
+            return "returnPage";
         }
-        responseData.setCode("40002");
-        responseData.setMessage("文件不存在");
-        return responseData;
+        model.addAttribute("title", "错误");
+        model.addAttribute("msg", "文件不存在");
+        return "returnPage";
     }
 
     @RequestMapping(value = "/findSumSize", method = RequestMethod.GET)

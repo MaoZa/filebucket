@@ -20,6 +20,17 @@ public class User implements Serializable {
     private Date lastLogin;
     private Integer userStatus;
     private Integer deleted;
+    private String emailCode; //注册及重置时入参使用
+
+    /**
+     * 必填信息空验证
+     */
+    public Boolean isNotNull(){
+        if(username == null || password == null || email == null || emailCode == null){
+            return true;
+        }
+        return false;
+    }
 
     /**
      * 清空除了id的其他属性
@@ -35,6 +46,14 @@ public class User implements Serializable {
         this.lastLogin = null;
         this.userStatus = null;
         this.deleted = null;
+    }
+
+    public String getEmailCode() {
+        return emailCode;
+    }
+
+    public void setEmailCode(String emailCode) {
+        this.emailCode = emailCode;
     }
 
     public Long getId() {

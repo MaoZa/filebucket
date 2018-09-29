@@ -46,4 +46,19 @@ public class EmailCodeServiceImpl implements EmailCodeService {
     public void deleteEmailCode(Long id){
         emailCodeMapper.deleteEmailCode(id);
     }
+
+    @Override
+    public void deleteEmailCodeByEmail(String email) throws Exception {
+        emailCodeMapper.deleteEmailCodeByEmail(email);
+    }
+
+    @Override
+    public EmailCode findCodeInfoByEmailAndEmailCode(String email, String emailCode) {
+        return emailCodeMapper.findCodeInfoByEmailAndEmailCode(email, emailCode);
+    }
+
+    @Override
+    public Integer updateCodeStatusByEmailAndEmailCode(String email, String emailCode) {
+        return emailCodeMapper.updateCodeStatusByEmailAndEmailCode(email, emailCode);
+    }
 }

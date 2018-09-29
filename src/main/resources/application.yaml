@@ -47,7 +47,6 @@ spring:
 
 
 
-
 tencent:
   dawnlandbucket:
     accessKey: AKIDMFXQ22BNXZ5Aj0pxWEfNmgRoCbWErOe4
@@ -59,7 +58,7 @@ tencent:
     userMaxSize: 209715200
 
 excludeUrl:
-  array: /user/login, /user/register, /user/resetpassword
+  array: /user/login, /user/register, /user/resetpassword , /email/sendcode, /user/reset, /login, /register
 
 mybatis:
   mapper-locations: mapper/*.xml

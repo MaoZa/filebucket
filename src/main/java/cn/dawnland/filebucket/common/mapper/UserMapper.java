@@ -15,4 +15,6 @@ public interface UserMapper {
     void updateNotNullUser(User user);
 
     User findUserByParams(User user);
+
+    Long findUserIdByEmail(@Param("email") String email);
 }

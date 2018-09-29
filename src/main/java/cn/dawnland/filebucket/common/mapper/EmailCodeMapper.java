@@ -1,6 +1,7 @@
 package cn.dawnland.filebucket.common.mapper;
 
 import cn.dawnland.filebucket.common.pojo.emailcode.EmailCode;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -16,4 +17,9 @@ public interface EmailCodeMapper {
 
     void deleteEmailCode(Long id);
 
+    void deleteEmailCodeByEmail(@Param("email") String email);
+
+    EmailCode findCodeInfoByEmailAndEmailCode(@Param("email") String email, @Param("emailCode") String emailCode);
+
+    Integer updateCodeStatusByEmailAndEmailCode(@Param("email") String email, @Param("emailCode") String emailCode);
 }

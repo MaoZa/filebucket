@@ -14,4 +14,6 @@ public interface UserService {
     void updateNotNullUser(User user);
 
     User findUserByParams(User user);
+
+    Long findUserIdByEmail(String email);
 }
