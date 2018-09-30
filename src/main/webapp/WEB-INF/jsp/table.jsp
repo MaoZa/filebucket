@@ -12,10 +12,81 @@
 <head>
     <title>文件列表</title>
     <meta charset="UTF-8">
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.js"></script>
+    <script language="JavaScript" >
+
+        $(document).ready(function(){
+                var form = $(this);
+                $.ajax({
+                    url: "/files/findFiles?pageNum=" + 1 + "&pageSize=" + 1,
+                    headers:{
+                        "Content-Type":"application/x-www-form-urlencoded"
+                    },
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        if(data.code == 0){
+                            if(data.data.filesList.size == 0){
+                                alert("未上传任何文件,请先上传文件");
+                                // window.location.href='/upload';
+                            }else{
+                                var arr = data.data.filesList.list;
+                                arr.forEach(function(value,i){
+                                    var tempTr = document.createElement("tr")
+                                    var tempNode = null;
+                                    var tempSub = document.createElement("th")
+                                    "<th>" + value.id + "</th>"
+                                    tempNode = document.createTextNode(value.id)
+                                    var tempSub = document.createElement("th")
+                                    tempSub.append(tempNode)
+                                    tempTr.append(tempSub);
+                                    tempNode = document.createTextNode(value.fileName)
+                                    tempSub = document.createElement("th")
+                                    tempSub.append(tempNode)
+                                    tempTr.append(tempSub);
+                                    tempNode = document.createTextNode(value.createTime)
+                                    tempSub = document.createElement("th")
+                                    tempSub.append(tempNode)
+                                    tempTr.append(tempSub);
+                                    tempNode = document.createTextNode(value.fileSize)
+                                    tempSub = document.createElement("th")
+                                    tempSub.append(tempNode)
+                                    tempTr.append(tempSub);
+                                    tempNode = document.createTextNode("下载文件")
+                                    tempA = document.createElement("a")
+                                    tempA.href = value.fileUrl
+                                    tempSub = document.createElement("th")
+                                    tempA.append(tempNode)
+                                    tempSub.append(tempA)
+                                    tempTr.append(tempSub);
+                                    tempNode = document.createTextNode("删除文件")
+                                    tempA = document.createElement("a")
+                                    tempA.href = "/files/delete/" + value.id
+                                    tempSub = document.createElement("th")
+                                    tempA.append(tempNode)
+                                    tempSub.append(tempA)
+                                    tempTr.append(tempSub);
+                                    $("#table").append(tempTr);
+                                })
+                            }
+                        }else{
+                            alert(data.message);
+                        }
+                    }
+                });
+        });
+    </script>
 </head>
 <body>
-<table border="2" style="width:500px;margin:auto;text-align:middle;" >
-    <p><a href="/upload">上传文件</a></p>
+<table id="table" border="2" style="width:500px;margin:auto;text-align:middle;" >
+    <center>
+        <form action="/files/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" id="file">
+        <input type="submit" value="上传">
+        </form>
+        <p>点击上传后请等待自动刷新</p>
+    </center>
+    <br />
     <tr>
         <th>文件id</th>
         <th>文件名</th>
@@ -24,16 +95,6 @@
         <th>文件链接</th>
         <th>删除文件</th>
     </tr>
-    <c:forEach items="${filesList}" var="file">
-        <tr>
-            <th>${file.id}</th>
-            <th>${file.fileName}</th>
-            <th>${file.createTime}</th>
-            <th>${file.fileSize}</th>
-            <th><a href="${file.fileUrl}">点击下载</a></th>
-            <th><a href="/files/delete/${file.id}">删除</a></th>
-        </tr>
-    </c:forEach>
 
 </table>
 </body>

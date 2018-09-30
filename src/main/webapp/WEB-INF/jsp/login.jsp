@@ -11,11 +11,45 @@
     <head>
         <title>login</title>
         <meta charset="UTF-8">
+        <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.js"></script>
+        <script language="JavaScript" >
 
+            function GetJsonData() {
+                var json = {
+                    "username": $("#username").val(),
+                    "password": $("#password").val()
+                };
+                return json;
+            }
+
+            $(document).ready(function(){
+                $("#loginForm").submit(function (envent) {
+                    envent.preventDefault();
+                    var form = $(this);
+                    $.ajax({
+                        url: form.attr("action"),
+                        headers:{
+                            "Content-Type":"application/json"
+                        },
+                        type: "POST",
+                        data: JSON.stringify(GetJsonData()),
+                        dataType: "json",
+                        success: function (data) {
+                            if(data.code == 0){
+                                alert("登录成功");
+                                window.location.href='/table';
+                            }else{
+                                alert(data.message);
+                            }
+                        }
+                    });
+                });
+            });
+        </script>
     </head>
     <body>
     <div style="margin:auto">
-        <form action="/user/login" method="post">
+        <form id="loginForm" action="/user/login" method="post">
             <fieldset  style="width:400px;margin:auto;" align="center">
                 <label for="username">用户名：</label>
                 <input id="username" name="username" type="text" required="required" required autofocus>

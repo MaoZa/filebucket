@@ -6,6 +6,8 @@ import cn.dawnland.filebucket.common.pojo.files.UploadMsg;
 import cn.dawnland.filebucket.common.pojo.user.UserSession;
 import cn.dawnland.filebucket.common.service.FilesService;
 import cn.dawnland.filebucket.common.utils.FilesSizeUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -71,14 +73,19 @@ public class FilesController {
     }
 
     @RequestMapping(value = "/findFiles", method = RequestMethod.GET)
-    public String findFiles(HttpServletRequest request, HttpServletResponse response, Model model){
+    @ResponseBody
+    public ResponseData findFiles(Integer pageNum,
+                                  Integer pageSize,
+                                  HttpServletRequest request, HttpServletResponse response, Model model){
         UserSession userSession = (UserSession)request.getSession().getAttribute("UserSession");
         Files files = new Files();
         files.setUserId(userSession.getId());
+        PageHelper.startPage(pageNum, pageSize);
         List<Files> filesList = filesService.findFileInfoByParams(files) ;
+        PageInfo pageInfo = new PageInfo(filesList);
         Map data = new HashMap<>();
-        model.addAttribute("filesList", filesList);
-        return "table";
+        data.put("filesList", pageInfo);
+        return new ResponseData(data);
     }
 
     @RequestMapping(value = "/delete/{filesId}")

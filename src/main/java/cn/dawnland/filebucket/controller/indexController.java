@@ -2,6 +2,7 @@ package cn.dawnland.filebucket.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class indexController {
@@ -9,6 +10,12 @@ public class indexController {
     @RequestMapping(value = "/")
     public String index(){
         return "index";
+    }
+
+    @RequestMapping("hello")
+    @ResponseBody
+    public String hello(){
+        return "helloWorld";
     }
 
     @RequestMapping("login")
@@ -26,7 +33,7 @@ public class indexController {
         return "table";
     }
 
-    @RequestMapping("/upload")
+    @RequestMapping("upload")
     public String upload(){
         return "upload";
     }

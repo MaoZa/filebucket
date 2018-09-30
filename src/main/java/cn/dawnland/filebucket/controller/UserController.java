@@ -8,9 +8,7 @@ import cn.dawnland.filebucket.common.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,7 +34,8 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "login", method = RequestMethod.POST)
-    public String login(User user, HttpServletRequest request, HttpServletResponse response, Model model){
+    @ResponseBody
+    public ResponseData login(@RequestBody User user, HttpServletRequest request, HttpServletResponse response, Model model){
         user = userService.findUserByUsernameAndPassword(user.getUsername(), user.getPassword());
         ResponseData responseData = new ResponseData();
         if(user != null){
@@ -49,18 +48,19 @@ public class UserController {
             //存入userSession
             request.getSession().setAttribute("UserSession", userSession);
         }else{
-            model.addAttribute("title", "错误");
-            model.addAttribute("msg", "用户名或密码错误");
-            return "returnPage";
+            responseData.setCode("40001");
+            responseData.setMessage("用户名或密码错误");
+            return responseData;
         }
         user.clean();
         user.setLastLogin(new Date());
         userService.updateNotNullUser(user);
-        return "redirect:/files/findFiles";
+        return responseData;
     }
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public ResponseData register(User user){
+    @ResponseBody
+    public ResponseData register(@RequestBody User user){
         ResponseData responseData = new ResponseData();
         if(user.isNotNull()){
             responseData.setCode("40001");

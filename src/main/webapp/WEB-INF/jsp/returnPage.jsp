@@ -9,6 +9,9 @@
 <html>
 <head>
     <title>${title}</title>
+    <script language="JavaScript">
+        setTimeout("history.go(-1)",1000) ;
+    </script>
 </head>
 <body>
     <center>
