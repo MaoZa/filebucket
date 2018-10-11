@@ -125,6 +125,7 @@ public class FilesController {
         }
         Map data = new HashMap();
         data.put("sumSize", FilesSizeUtil.getPrintSize(sumSize));
+        data.put("userMaxSize", FilesSizeUtil.getPrintSize(userMaxSize));
         return new ResponseData(data);
     }
 

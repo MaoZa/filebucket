@@ -47,6 +47,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             responseData.setMessage("未登录用户");
             response.setHeader("Content-Type", "application/json");
             response.getWriter().println(Jackson.toJsonString(responseData));
+            response.sendRedirect("login");
             return false;
         }else if(userSession.getLoginIp() != request.getRemoteAddr()){
             logger.info("登录失效: 需重新登录-拒绝");

@@ -74,6 +74,18 @@
                         }
                     }
                 });
+
+                $.ajax({
+                    url: "/files/findSumSize",
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        if(data.code == 0){
+                            var text = document.createTextNode("储存空间:" + data.data.sumSize + "/" + data.data.userMaxSize);
+                           $("#SumSize").append(text);
+                        }
+                    }
+                });
         });
     </script>
 </head>
@@ -85,6 +97,7 @@
         <input type="submit" value="上传">
         </form>
         <p>点击上传后请等待自动刷新</p>
+        <p id="SumSize"></p>
     </center>
     <br />
     <tr>

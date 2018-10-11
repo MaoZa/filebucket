@@ -20,8 +20,7 @@ public class FilesSizeUtil {
             //因为如果以MB为单位的话，要保留最后1位小数，
             //因此，把此数乘以100之后再取余
             size = size * 100;
-            return String.valueOf((size / 100)) + "."
-                    + String.valueOf((size % 100)) + "MB";
+            return String.valueOf((size / 100)) + "." + String.valueOf((size % 100)) + "MB";
         } else {
             //否则如果要以GB为单位的，先除于1024再作同样的处理
             size = size * 100 / 1024;
