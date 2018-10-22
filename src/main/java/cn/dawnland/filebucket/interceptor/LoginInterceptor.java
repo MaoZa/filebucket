@@ -1,8 +1,6 @@
 package cn.dawnland.filebucket.interceptor;
 
-import cn.dawnland.filebucket.common.pojo.ResponseData;
 import cn.dawnland.filebucket.common.pojo.user.UserSession;
-import com.qcloud.cos.utils.Jackson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,11 +40,11 @@ public class LoginInterceptor implements HandlerInterceptor {
         UserSession userSession = (UserSession)request.getSession().getAttribute("UserSession");
         if(userSession == null){
             logger.info("登录拦截器：未登录请求-拒绝");
-            ResponseData responseData = new ResponseData();
-            responseData.setCode("40001");
-            responseData.setMessage("未登录用户");
-            response.setHeader("Content-Type", "application/json");
-            response.getWriter().println(Jackson.toJsonString(responseData));
+//            ResponseData responseData = new ResponseData();
+//            responseData.setCode("40001");
+//            responseData.setMessage("未登录用户");
+//            response.setHeader("Content-Type", "application/json");
+//            response.getWriter().println(Jackson.toJsonString(responseData));
             response.sendRedirect("login");
             return false;
         }else if(userSession.getLoginIp() != request.getRemoteAddr()){
